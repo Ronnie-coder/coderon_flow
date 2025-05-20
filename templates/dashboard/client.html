@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Client Dashboard{% endblock %}
+
+{% block content %}
+<div class="bg-white p-6 rounded-lg shadow">
+    <h1 class="text-2xl font-bold mb-4">Welcome, {{ current_user.name }}</h1>
+    
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold mb-4">Your Invoices</h2>
+        <div class="grid gap-4">
+            {% for invoice in invoices %}
+            <div class="border p-4 rounded">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="font-medium">Invoice #{{ invoice.id }}</p>
+                        <p class="text-gray-600">{{ invoice.date }}</p>
+                    </div>
+                    <a href="{{ url_for('client.download_invoice', invoice_id=invoice.id) }}" 
+                       class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        Download PDF
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div>
+        <h2 class="text-xl font-semibold mb-4">Request New Service</h2>
+        <form method="POST" action="{{ url_for('client.request_service') }}" class="space-y-4">
+            <div>
+                <label for="service_type" class="block text-gray-700">Service Type</label>
+                <select id="service_type" name="service_type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                    <option value="consulting">Consulting</option>
+                    <option value="development">Development</option>
+                    <option value="design">Design</option>
+                </select>
+            </div>
+            <div>
+                <label for="description" class="block text-gray-700">Description</label>
+                <textarea name="description" 
+                          id="description"
+                          placeholder="Please describe your service request"
+                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                          rows="4"></textarea>
+            </div>
+            <button type="submit" 
+                    class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                Submit Request
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
